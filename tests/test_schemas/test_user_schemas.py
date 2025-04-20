@@ -78,3 +78,9 @@ def test_user_create_too_long_nickname(user_create_data):
     user_create_data["nickname"] = "a" * 51
     with pytest.raises(ValidationError):
         UserCreate(**user_create_data)
+
+@pytest.mark.parametrize("password", ["short", "nouppercase123!", "NOLOWERCASE123!", "NoDigits!", "NoSpecial123"])
+def test_user_create_invalid_password(password, user_create_data):
+    user_create_data["password"] = password
+    with pytest.raises(ValidationError):
+        UserCreate(**user_create_data)

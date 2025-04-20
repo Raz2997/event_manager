@@ -213,3 +213,15 @@ async def test_create_user_too_long_nickname(async_client, admin_token):
     response = await async_client.post("/users/", json=invalid_data, headers=headers)
     assert response.status_code == 422
     assert "String should have at most 50 characters" in response.json()["detail"][0]["msg"]
+
+@pytest.mark.asyncio
+async def test_create_user_weak_password(async_client, admin_token):
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    invalid_data = {
+        "email": "test@example.com",
+        "password": "weak",  # Too short
+        "nickname": "test_user"
+    }
+    response = await async_client.post("/users/", json=invalid_data, headers=headers)
+    assert response.status_code == 422
+    assert "Password must be at least 8 characters long" in response.json()["detail"][0]["msg"]
