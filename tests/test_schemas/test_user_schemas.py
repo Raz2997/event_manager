@@ -90,3 +90,9 @@ def test_user_create_invalid_nickname_format(nickname, user_create_data):
     user_create_data["nickname"] = nickname
     with pytest.raises(ValidationError):
         UserCreate(**user_create_data)
+
+@pytest.mark.parametrize("password", ["password123", "qwerty123", "12345678"])
+def test_user_create_common_password(password, user_create_data):
+    user_create_data["password"] = password
+    with pytest.raises(ValidationError):
+        UserCreate(**user_create_data)

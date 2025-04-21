@@ -38,8 +38,6 @@ class UserBase(BaseModel):
         from_attributes = True
 
 
-
-
 class UserCreate(UserBase):
     email: EmailStr = Field(..., example="john.doe@example.com")
     password: str = Field(..., example="Secure*1234")
@@ -47,6 +45,9 @@ class UserCreate(UserBase):
 
     @validator("password")
     def validate_password(cls, value):
+        common_passwords = ["password123", "qwerty123", "12345678"]
+        if value.lower() in common_passwords:
+            raise ValueError("Password is too common")
         if len(value) < 8:
             raise ValueError("Password must be at least 8 characters long")
         if not re.search(r"[A-Z]", value):
