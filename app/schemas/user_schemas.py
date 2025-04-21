@@ -37,10 +37,13 @@ class UserBase(BaseModel):
     class Config:
         from_attributes = True
 
+
+
+
 class UserCreate(UserBase):
     email: EmailStr = Field(..., example="john.doe@example.com")
     password: str = Field(..., example="Secure*1234")
-    nickname: Optional[str] = Field(None, min_length=3, max_length=50, pattern=r'^[\w-]+$', example=generate_nickname())
+    nickname: Optional[str] = Field(None, min_length=3, max_length=50, pattern=r'^\w[\w-]*\w$', example=generate_nickname())
 
     @validator("password")
     def validate_password(cls, value):
@@ -58,7 +61,7 @@ class UserCreate(UserBase):
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = Field(None, example="john.doe@example.com")
-    nickname: Optional[str] = Field(None, min_length=3, max_length=50, pattern=r'^[\w-]+$', example="john_doe123")
+    nickname: Optional[str] = Field(None, min_length=3, max_length=50, pattern=r'^\w[\w-]*\w$', example="john_doe123")
     # ... other fields ...
     first_name: Optional[str] = Field(None, example="John")
     last_name: Optional[str] = Field(None, example="Doe")
